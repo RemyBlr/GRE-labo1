@@ -2,12 +2,51 @@ package ch.heig.gre.groupQ;
 
 import ch.heig.gre.maze.MazeBuilder;
 import ch.heig.gre.maze.MazeGenerator;
+import ch.heig.gre.maze.Progression;
+import ch.heig.gre.util.ArrayUtil;
 
-// TODO : classe à compléter et documenter
+import java.util.Arrays;
+import java.util.Stack;
+
 public final class DfsGenerator implements MazeGenerator {
   @Override
   public void generate(MazeBuilder builder, int from) {
-    // Mise à jour de l'interface graphique :
-    // builder.progressions().setLabel(..., ...);
+    int n = builder.topology().nbVertices();
+    Progression[] progressions = new Progression[n];
+    Arrays.fill(progressions, Progression.PENDING);
+    dfs(builder, progressions, from);
+  }
+
+  private void dfs(MazeBuilder builder, Progression[] progressions, int from) {
+    Stack<Integer> stack = new Stack<>();
+
+    progressions[from] = Progression.PROCESSING;
+    builder.progressions().setLabel(from, Progression.PROCESSING);
+    stack.push(from);
+
+    while (!stack.isEmpty()) {
+      int current = stack.peek();//on regarde en haut de la pile (sans retirer)
+      int neighbor = randomPendingNeighbor(builder, progressions, current);
+
+      if (neighbor == -1) {// Tous les voisins de current ont été visités => finalise
+        stack.pop();//ici on retire de la pile!
+        progressions[current] = Progression.PROCESSED;
+        builder.progressions().setLabel(current, Progression.PROCESSED);
+      }
+      else {// casse le mur vers le voisin + explore
+        builder.removeWall(current, neighbor);
+        progressions[neighbor] = Progression.PROCESSING;
+        builder.progressions().setLabel(neighbor, Progression.PROCESSING);
+        stack.push(neighbor);//on ajoute le voisin en haut de la pile(sans retirer le précédent)
+      }
+    }
+  }
+
+  // Retourne l'id du premier voisin disponible(PENDING) aléatoire sinon -1
+  private int randomPendingNeighbor(MazeBuilder builder, Progression[] progressions, int vertex) {
+    for (int neighbor : ArrayUtil.shuffle(builder.topology().neighbors(vertex))) {
+      if (progressions[neighbor] == Progression.PENDING) return neighbor;
+    }
+    return -1;
   }
 }

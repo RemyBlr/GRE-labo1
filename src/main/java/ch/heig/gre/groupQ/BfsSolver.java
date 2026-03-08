@@ -6,6 +6,9 @@ import ch.heig.gre.graph.PositiveWeightFunction;
 import ch.heig.gre.graph.VertexLabelling;
 import ch.heig.gre.maze.MazeSolver;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // TODO : compléter cette classe et documenter. Voir documentation de l'interface MazeSolver et des classes associées
 //  pour la description des paramètres.
 public final class BfsSolver implements MazeSolver {
@@ -23,7 +26,12 @@ public final class BfsSolver implements MazeSolver {
     // Metadata metadata = new Metadata();
     // metadata.put(Keys.LENGTH, ...);
     // metadata.put(Keys.NB_OPTIMAL_PATHS, ...);
-
+    //List<Integer> path = new ArrayList<Integer>();
+    //for (int i = 0; i < 25; i++)
+    //{
+    //  path.add(i);
+    //}
+    //return new Result(path, null);
     return null;
   }
 }

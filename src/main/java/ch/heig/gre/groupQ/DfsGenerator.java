@@ -1,8 +1,15 @@
 /**
+ * Class : GRE
  * File : DfsGenerator.java
  * Project name : LABO - Labyrinthes et explorations de graphes
+ * Date : 19.03.2026
  * Project members :
  * - Florian Duruz, Rémy Bleuer
+ *
+ * Description:
+ * Implémentation du générateur de labyrinthe utilisant l'algorithme DFS (Depth-First Search).
+ * Le DFS génère un labyrinthe en explorant les sommets en profondeur.
+ * L'ordre d'exploration des voisins est aléatoire, ce qui garantit un labyrinthe différent à chaque génération.
  */
 package ch.heig.gre.groupQ;
 
@@ -23,6 +30,21 @@ public final class DfsGenerator implements MazeGenerator {
     dfs(builder, progressions, from);
   }
 
+  /**
+   * Exécute l'algorithme DFS (Depth-First Search) itératif pour générer un labyrinthe.
+   *
+   * 1. Initialisation du sommet de départ, marqué comme PROCESSING et empilé.
+   * 2. Exploration en profondeur à partir du sommet courant (sommet au sommet de la pile).
+   * 3. Pour chaque sommet traité :
+   *    - Si un voisin PENDING existe, casse le mur vers ce voisin et l'empile.
+   *    - Sinon, tous les voisins ont été visités : dépile et marque le sommet comme PROCESSED.
+   * 4. Les voisins sont mélangés aléatoirement à la première visite pour garantir un labyrinthe aléatoire.
+   * 5. Arrêt lorsque la pile est vide (tous les sommets accessibles ont été visités).
+   *
+   * @param builder      le constructeur du labyrinthe (gère les murs et les progressions)
+   * @param progressions tableau d'état pour chaque sommet du graphe
+   * @param from         le sommet de départ
+   */
   private void dfs(MazeBuilder builder, Progression[] progressions, int from) {
     Stack<Integer> stack = new Stack<>();
 

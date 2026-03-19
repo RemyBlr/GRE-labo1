@@ -1,3 +1,9 @@
+/**
+ * File : BfsSolver.java
+ * Project name : LABO - Labyrinthes et explorations de graphes
+ * Project members :
+ * - Florian Duruz, Rémy Bleuer
+ */
 package ch.heig.gre.groupQ;
 
 import ch.heig.gre.Keys;
@@ -40,10 +46,11 @@ public final class BfsSolver implements MazeSolver {
 
     Queue<Integer> queue = new ArrayDeque<>();
     queue.add(source);
-
     while (!queue.isEmpty()) {
       int current = queue.poll();
       state[current] = Progression.PROCESSED;
+      //On s'arrête quand on traîte la sortie(et donc tout les chemins optimaux possibles sont trouvés)
+      if(current == destination) break;
 
       for (int neighbor : graph.neighbors(current)) {
         if (state[neighbor] == Progression.PENDING) {
@@ -54,16 +61,16 @@ public final class BfsSolver implements MazeSolver {
           distances.setLabel(neighbor, dist[neighbor]);
           queue.add(neighbor);
         } else if (state[neighbor] == Progression.PROCESSING && dist[neighbor] == dist[current] + 1) {
-          //si on vérifie une voisin qui à deja été calculer, on regarde si si la distance en fait
-          //un autre chemin optimal possible donc si la différence de distance est aussi de 1
+          //si un voisin a deja été calculé, on regarde si la distance enregistrée pour ce dernier en fait
+          //un autre chemin optimal possible ce qui veut dire : si la différence de distance est aussi de 1
           optimalPathCount[neighbor] += optimalPathCount[current];
         }
       }
     }
 
     List<Integer> path = new ArrayList<>();
-    for (int cur = destination; cur != -1; cur = parent[cur]) {
-      path.add(cur);
+    for (int index = destination; index != -1; index = parent[index]) {
+      path.add(index);
     }
     Collections.reverse(path);
 

@@ -1,3 +1,9 @@
+/**
+ * File : DfsGenerator.java
+ * Project name : LABO - Labyrinthes et explorations de graphes
+ * Project members :
+ * - Florian Duruz, Rémy Bleuer
+ */
 package ch.heig.gre.groupQ;
 
 import ch.heig.gre.maze.MazeBuilder;

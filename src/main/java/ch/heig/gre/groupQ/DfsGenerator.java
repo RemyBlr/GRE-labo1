@@ -31,17 +31,17 @@ public final class DfsGenerator implements MazeGenerator {
     stack.push(from);
 
     int[][] neighbors = new int[builder.topology().nbVertices()][];
-    //possible amélioration : retenir l'index du prochain voisin à explorer au lieu de tout refaire à chaque fois
 
     while (!stack.isEmpty()) {
       int current = stack.peek();//on regarde en haut de la pile (sans retirer)
 
+      //on ne veut shuffle que une fois les voisins
       if(neighbors[current] == null)
         neighbors[current] = ArrayUtil.shuffle(builder.topology().neighbors(current));
 
       int neighbor = randomPendingNeighbor(progressions, neighbors[current]);
 
-      if (neighbor == -1) {// Tous les voisins de current ont été visités => finalise
+      if (neighbor == -1) {// Tous les voisins de current ont été visité => finalise
         stack.pop();//ici on retire de la pile!
         progressions[current] = Progression.PROCESSED;
         builder.progressions().setLabel(current, Progression.PROCESSED);
@@ -55,6 +55,12 @@ public final class DfsGenerator implements MazeGenerator {
     }
   }
 
+  /**
+   * Choisi le premier voisin valide (état PENDING) dans un tableau déjà "shuffle"
+   * @param progressions Tableau contenant les états des sommets du labyrinthe
+   * @param neighbors Tableau de voisin déjà shuffle
+   * @return index d'un voisin si trouvé sinon -1
+   */
   private int randomPendingNeighbor(Progression[] progressions, int[] neighbors) {
     for (int neighbor : neighbors) {
       if (progressions[neighbor] == Progression.PENDING) return neighbor;

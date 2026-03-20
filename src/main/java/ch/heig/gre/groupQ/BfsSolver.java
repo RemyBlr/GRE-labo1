@@ -70,7 +70,7 @@ public final class BfsSolver implements MazeSolver {
 
     // Initialisation de la source
     state[source] = Progression.PROCESSING;
-    dist[source] = 0;
+    dist[source] = -1;
     optimalPathCount[source] = 1;
     distances.setLabel(source, 0);
 
